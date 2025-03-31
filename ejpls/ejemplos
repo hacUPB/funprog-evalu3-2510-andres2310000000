@@ -1,0 +1,30 @@
+/*
+******************************************************
+*      Universidad pontificia Bolivariana            *
+*      Escuela de ingenierias                        *
+*      Ingenieria electrica                          *
+*      Andres Gonzalez                               *
+*      ID:000516177                                  *
+******************************************************
+*/
+#include <stdio.h>
+
+void encabezdo(void);
+
+int main(int argc,char const *argv[])
+{
+encabezado();
+    return 0;
+}
+
+void encabezado(void)
+{
+   printf("\
+******************************************************\n\
+*      Universidad pontificia Bolivariana            *\n\
+*      Escuela de ingenierias                        *\n\
+*      Ingenieria electrica                          *\n\
+*      Andres Gonzalez                               *\n\
+*      ID:000516177                                  *\n\
+******************************************************\n"); 
+}
