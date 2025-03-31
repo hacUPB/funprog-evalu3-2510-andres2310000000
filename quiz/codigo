@@ -1,0 +1,25 @@
+
+#include <stdio.h>
+
+int main()
+{
+    int a, pr;// no se declaro pr
+    a=50;
+    while (a>0)//no tenia parentesis
+    {
+    printf("ingrese cantidad de pr:");//no iba el %d
+    scanf("%d", &pr); // no se agrego el %d
+     {
+    if(pr<=a)  // no tenia parentesis
+       {
+    a=a-pr;
+        printf("compra realizada,quedan %d productos",a); // no se agrego el %d
+       }
+    else // no estaba el else
+       {
+      printf("no hay suficiente inventario");
+       }
+      }
+    }
+    return 0; // el return sale del while
+}
