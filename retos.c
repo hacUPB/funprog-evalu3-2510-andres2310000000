@@ -2,16 +2,18 @@
 #include <stdlib.h>
 #include <math.h>
 
-void ley_de_ohm();
-void factor_de_potencia();
-void resistencia_conductor();
+void ley_de_ohm(float *V, float *I, float *R);
+void factor_de_potencia(float *P, float *S, float *Q, float *FP, float *angulo);
+void resistencia_conductor(float *ro, float *alfa, float *L, float *A, float *T, float *R20, float *R);
 void resistencia_led();
 
 int main() 
 {
     int menu;
-    do 
-    {
+    float voltaje=0, corriente=0, resistencia=0;
+    float p_activa=0, p_aparente=0, p_reactiva=0,fa_po=0,ang=0;
+    float p=0, a=0, L_1=0, A_1=0, Temp=0, R20_1=0, Res=0; 
+    do{
     printf("\nElija lo que desea calcular:\n");
     printf("1. Ley de Ohm\n");
     printf("2. Factor de Potencia\n");
@@ -23,13 +25,13 @@ int main()
         switch (menu)
          {
             case 1:
-                ley_de_ohm();
+                ley_de_ohm(&voltaje, &corriente, &resistencia);
                 break;
             case 2:
-                factor_de_potencia();
+                factor_de_potencia(&p_activa, &p_aparente, &p_reactiva, &fa_po, &ang);
                 break;
             case 3:
-                resistencia_conductor();
+                resistencia_conductor(&p, &a, &L_1, &A_1, &Temp, &R20_1, &Res);
                 break;
             case 4:
                 resistencia_led();
@@ -46,10 +48,9 @@ int main()
     return 0;
 }
 
-void ley_de_ohm() 
+void ley_de_ohm(float *V, float *I, float *R) 
 {
     int menu_ley_ohm;
-    float V, I, R;
     printf("\nHas seleccionado calcular la Ley de Ohm.\n");
     printf("1. Calcular Tensión \n");
     printf("2. Calcular Corriente\n");
@@ -61,32 +62,32 @@ void ley_de_ohm()
     {
         case 1:
             printf("Ingrese la corriente (A): ");
-            scanf("%f", &I);
+            scanf("%f", I);
             printf("Ingrese la resistencia (Ohm): ");
-            scanf("%f", &R);
-            V=I*R;
-            printf("Voltaje = %.2f V\n", V);
+            scanf("%f", R);
+            (*V)=(*I)*(*R);
+            printf("Voltaje = %.2f V\n", *V);
             break;
         case 2:
             printf("Ingrese el voltaje (V): ");
-            scanf("%f", &V);
+            scanf("%f", V);
             printf("Ingrese la resistencia (Ohm): ");
-            scanf("%f", &R);
+            scanf("%f", R);
             if (R != 0) {
-                I=V/R;
-                printf("Corriente = %.2f A\n", I);
+                *I = *V / *R;
+                printf("Corriente = %.2f A\n", *I);
             } else {
                 printf("Error: La resistencia no puede ser cero.\n");
             }
             break;
         case 3:
             printf("Ingrese el voltaje (V): ");
-            scanf("%f", &V);
+            scanf("%f", V);
             printf("Ingrese la corriente (A): ");
-            scanf("%f", &I);
+            scanf("%f", I);
             if (I != 0) {
-                R=V/I;
-                printf("Resistencia = %.2f Ohm\n", R);
+                *R = *V / *I;
+                printf("Resistencia = %.2f Ohm\n", *R);
             } else {
                 printf("Error: La corriente no puede ser cero.\n");
             }
@@ -96,10 +97,9 @@ void ley_de_ohm()
     }
 }
     
-    void factor_de_potencia() 
+    void factor_de_potencia( float *P, float *S, float *Q, float *FP, float *angulo) 
     {
     int menu_factor_de_potencia;
-    float P, S, Q, FP, angulo;
 
     printf("\nHas seleccionado calcular el Factor de Potencia.\n");
     printf("Seleccione una opción: \n");
@@ -113,12 +113,12 @@ void ley_de_ohm()
      {
         case 1:
             printf("Ingrese la potencia activa (W): ");
-            scanf("%f", &P);
+            scanf("%f", P);
             printf("Ingrese la potencia aparente (VA): ");
-            scanf("%f", &S);
+            scanf("%f", S);
             if (S != 0) {
-                FP=P/S;
-                printf("Factor de Potencia = %.2f\n", FP);
+                *FP = *P / *S;
+                printf("Factor de Potencia = %.2f\n", *FP);
             } else {
                 printf("Error: La potencia aparente no puede ser cero.\n");
             }
@@ -126,15 +126,15 @@ void ley_de_ohm()
             
         case 2: // U
             printf("Ingrese la potencia activa (W): ");
-            scanf("%f", &P);
+            scanf("%f", P);
             printf("Ingrese la potencia reactiva (VAR): ");
-             scanf("%f", &Q);
-            S = sqrt(P*P+Q*Q);
+             scanf("%f", Q);
+            *S = sqrt((*P)*(*P)+(*Q)*(*Q));
             if (S!=0) 
             {
-                FP=P/S;
-                printf("Factor de Potencia = %f\n", FP);
-                printf("Potencia Aparente = %f VA\n", S);
+                (*FP) = *P / *S;
+                printf("Factor de Potencia = %f\n", *FP);
+                printf("Potencia Aparente = %f VA\n", *S);
             } else 
             {
                 printf("Error: La potencia aparente no puede ser cero.\n");
@@ -144,14 +144,14 @@ void ley_de_ohm()
         case 3:
         printf("\nHas seleccionado calcular el Factor de Potencia usando Q y S.\n");
         printf("Ingrese la potencia reactiva (VAR): ");
-        scanf("%f", &Q);
+        scanf("%f", Q);
         printf("Ingrese la potencia aparente (VA): ");
-         scanf("%f", &S);
+         scanf("%f", S);
 
              if (S!=0 && Q<=S) 
              { 
-             FP = sqrt(1-(Q/S)*(Q/S)); 
-             printf("Factor de Potencia = %f\n", FP);
+             *FP = sqrt(1-((*Q) / (*S))*( (*Q) / (*S))); 
+             printf("Factor de Potencia = %f\n", *FP);
              }        
              else 
              {
@@ -161,9 +161,9 @@ void ley_de_ohm()
     
         case 4:
             printf("Ingrese el ángulo de desfase (en grados): ");
-             scanf("%f", &angulo);
-            FP = cos(angulo); 
-            printf("Factor de Potencia = %f\n", FP);
+             scanf("%f", angulo);
+            *FP = cos(*angulo); 
+            printf("Factor de Potencia = %f\n", *FP);
             break;
             
         default:
@@ -171,10 +171,9 @@ void ley_de_ohm()
     } 
   }
   
-  void resistencia_conductor() 
+  void resistencia_conductor(float *ro, float *alfa, float *L, float *A, float *T, float *R20, float *R) 
 {
     int menu_resistencia_conductor;
-    float ro, alfa, L, A, T, R20, R;
 
     printf("\nResistencia de un Conductor.\n");
     printf("Seleccione el material del conductor: \n");
@@ -187,22 +186,22 @@ void ley_de_ohm()
     switch (menu_resistencia_conductor) 
     {
         case 1: 
-        ro=1.68e-8;
-            alfa=0.00393;
+        *ro=1.68e-8;
+            *alfa=0.00393;
             break;
         case 2:
-            ro=2.82e-8;
-            alfa=0.00390;
+            *ro=2.82e-8;
+            *alfa=0.00390;
             break;
         case 3:
-            ro=2.44e-8;
-            alfa=0.00340;
+            *ro=2.44e-8;
+            *alfa=0.00340;
             break;
         case 4:
             printf("Ingrese la resistividad del material a 20°C (Ohm·m): ");
-            scanf("%f", &ro);
+            scanf("%f", ro);
             printf("Ingrese el coeficiente de temperatura (1/°C): ");
-            scanf("%f", &alfa);
+            scanf("%f", alfa);
             break;
         default:
             printf("Opción no válida.\n");
@@ -210,17 +209,17 @@ void ley_de_ohm()
     }
 
     printf("Ingrese la longitud del conductor (m): ");
-    scanf("%f", &L);
+    scanf("%f", L);
     printf("Ingrese el área de la sección transversal (m^2): ");
-    scanf("%f", &A);
+    scanf("%f", A);
     printf("Ingrese la temperatura de operación (°C): ");
-    scanf("%f", &T);
+    scanf("%f", T);
 
     if (A>0) 
     {
-        R20 = ro*(L / A);
-        R = R20*(1+alfa*(T-20));
-        printf("La resistencia del conductor a %f°C es: %f Ohm\n", T, R);
+        *R20 = (*ro)*((*L) / (*A));
+        *R = (*R20)*(1+(*alfa)*((*T)-20));
+        printf("La resistencia del conductor a %f°C es: %f Ohm\n", *T, *R);
     } else {
         printf("Error: El área debe ser mayor que cero.\n");
     }
@@ -282,4 +281,5 @@ void resistencia_led()
     printf("Potencia disipada en la resistencia: %f W\n", P_R);
     printf("Potencia total del circuito: %f W\n", P_Total);
     printf("Corriente total suministrada por la fuente: %f A\n", I_Total);
+    return;
 }
